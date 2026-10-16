@@ -2,5 +2,7 @@
   "name": "GOD LOVES BROKEN THINGS",
   "description": "고급 다크 판타지 캐릭터 채팅 세계관 공식 프로모션 웹사이트. '돌아가려면, 존재할 이유를 증명해야 한다.' 고딕 다크 판타지, 뒤틀린 운명의 붉은 실, 고립된 섬과 신의 제단.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }

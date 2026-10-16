@@ -13,25 +13,34 @@ interface ImageSlotContextType {
   closeUploadModal: () => void;
 }
 
-const STORAGE_KEY = 'god_loves_broken_things_slots_v2';
+const STORAGE_KEY = 'god_loves_broken_things_slots_v3';
 
-const SAMPLE_ARTWORK: Record<string, string> = {
-  'hero-volos': '/src/assets/images/hero_god_marionette_1792098950974.jpg',
-  'lucian-portrait': '/src/assets/images/character_inquisitor_1792098953169.jpg',
-  'karcel-portrait': '/src/assets/images/character_executioner_1792099000574.jpg',
-  'leon-portrait': '/src/assets/images/character_scholar_1792099001874.jpg',
-  'yujin-portrait': '/src/assets/images/character_puppeteer_1792099002781.jpg',
-  'taeha-portrait': '/src/assets/images/character_prophet_1792099002734.jpg',
-  'sion-portrait': '/src/assets/images/character_prince_1792099002863.jpg',
-  'volos-image': '/src/assets/images/hero_god_marionette_1792098950974.jpg',
-  'altar-image': '/src/assets/images/altar_broken_covenant_1792098953408.jpg',
-  'coast-image': '/src/assets/images/island_desolate_sanctuary_1792098951631.jpg',
+export const CANONICAL_IMAGE_MAP: Record<string, string> = {
+  'hero-volos': 'https://raw.githubusercontent.com/gaeun5085-gif/pp/refs/heads/main/A.png',
+  'lucian-portrait': 'https://raw.githubusercontent.com/gaeun5085-gif/pp/refs/heads/main/I1.png',
+  'karcel-portrait': 'https://raw.githubusercontent.com/gaeun5085-gif/pp/refs/heads/main/I2.png',
+  'leon-portrait': 'https://raw.githubusercontent.com/gaeun5085-gif/pp/refs/heads/main/I3.png',
+  'yujin-portrait': 'https://raw.githubusercontent.com/gaeun5085-gif/pp/refs/heads/main/I4.png',
+  'taeha-portrait': 'https://raw.githubusercontent.com/gaeun5085-gif/pp/refs/heads/main/I5.png',
+  'sion-portrait': 'https://raw.githubusercontent.com/gaeun5085-gif/pp/refs/heads/main/I6.png',
+  'coast-image': 'https://raw.githubusercontent.com/gaeun5085-gif/pp/refs/heads/main/M1.png',
+  'jungle-image': 'https://raw.githubusercontent.com/gaeun5085-gif/pp/refs/heads/main/M2.png',
+  'cave-image': 'https://raw.githubusercontent.com/gaeun5085-gif/pp/refs/heads/main/M3.png',
+  'ruins-image': 'https://raw.githubusercontent.com/gaeun5085-gif/pp/refs/heads/main/M4.png',
+  'depths-image': 'https://raw.githubusercontent.com/gaeun5085-gif/pp/refs/heads/main/M5.png',
+  'camp-image': 'https://raw.githubusercontent.com/gaeun5085-gif/pp/refs/heads/main/M6.png',
+  'cabin-image': 'https://raw.githubusercontent.com/gaeun5085-gif/pp/refs/heads/main/M7.png',
+  'afterimage-image': 'https://raw.githubusercontent.com/gaeun5085-gif/pp/refs/heads/main/J1.png',
+  'mutated-image': 'https://raw.githubusercontent.com/gaeun5085-gif/pp/refs/heads/main/J2.png',
+  'predator-image': 'https://raw.githubusercontent.com/gaeun5085-gif/pp/refs/heads/main/J3.png',
+  'volos-image': 'https://raw.githubusercontent.com/gaeun5085-gif/pp/refs/heads/main/A51.png',
+  'altar-image': 'https://raw.githubusercontent.com/gaeun5085-gif/pp/refs/heads/main/A5.png',
 };
 
 const ImageSlotContext = createContext<ImageSlotContextType | undefined>(undefined);
 
 export const ImageSlotProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [slots, setSlots] = useState<Record<string, string>>({});
+  const [slots, setSlots] = useState<Record<string, string>>(CANONICAL_IMAGE_MAP);
   const [isManagerOpen, setIsManagerOpen] = useState(false);
   const [activeUploadSlot, setActiveUploadSlot] = useState<string | null>(null);
 
@@ -39,17 +48,14 @@ export const ImageSlotProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
-        setSlots(JSON.parse(saved));
+        const parsed = JSON.parse(saved);
+        setSlots({ ...CANONICAL_IMAGE_MAP, ...parsed });
       } else {
-        // By default, start with clean placeholders or hero backdrop so the user sees the designed structure
-        // Let's set hero-volos and altar as subtle initial atmosphere while leaving character slots clean or custom
-        setSlots({
-          'hero-volos': SAMPLE_ARTWORK['hero-volos'],
-          'altar-image': SAMPLE_ARTWORK['altar-image'],
-        });
+        setSlots(CANONICAL_IMAGE_MAP);
+        persist(CANONICAL_IMAGE_MAP);
       }
     } catch {
-      // ignore
+      setSlots(CANONICAL_IMAGE_MAP);
     }
   }, []);
 
@@ -88,8 +94,8 @@ export const ImageSlotProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   };
 
   const loadSampleArt = () => {
-    setSlots(SAMPLE_ARTWORK);
-    persist(SAMPLE_ARTWORK);
+    setSlots(CANONICAL_IMAGE_MAP);
+    persist(CANONICAL_IMAGE_MAP);
   };
 
   const openUploadModal = (slotId: string) => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useImageSlots } from '../context/ImageSlotContext';
+import { useImageSlots, CANONICAL_IMAGE_MAP } from '../context/ImageSlotContext';
 import { Upload, Sparkles } from 'lucide-react';
 
 interface ImageSlotProps {
@@ -24,7 +24,7 @@ export const ImageSlot: React.FC<ImageSlotProps> = ({
   allowDirectUpload = true,
 }) => {
   const { slots, openUploadModal } = useImageSlots();
-  const currentImage = slots[slotId];
+  const currentImage = slots[slotId] || CANONICAL_IMAGE_MAP[slotId];
 
   return (
     <div
